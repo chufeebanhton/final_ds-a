@@ -8,6 +8,7 @@
 ### step 2
 ``` terminal
     cd to source
+    npx tsc
     node ./dist/main.js
 ```
 # how to find question source ts code?
