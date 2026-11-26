@@ -29,7 +29,7 @@ export function removeById(products: Product[], id: number): Product | undefined
 // Update products
 export function updateById(products: Product[], id: number, product: Partial<Product>): Product | undefined {
     const index = products.indexOf(products.find(item => item.id === id)!);
-    if (index === -1) console.log('Product not Found!');
+    if (index === -1) return undefined;
     else {
         const result = Object.assign(products[index], product);
         return result

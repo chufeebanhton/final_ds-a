@@ -33,7 +33,7 @@ function removeById(products, id) {
 function updateById(products, id, product) {
     const index = products.indexOf(products.find(item => item.id === id));
     if (index === -1)
-        console.log('Product not Found!');
+        return undefined;
     else {
         const result = Object.assign(products[index], product);
         return result;

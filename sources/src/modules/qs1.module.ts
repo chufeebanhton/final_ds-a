@@ -14,7 +14,7 @@ const subQuestions: Choice[] = [
 ];
 
 export async function qs1(products: Product[]): Promise<void> {
-    console.log('QUESTION 1: ARRAY');
+    console.log('\n\x1b[1;36m❓ QUESTION 1: ARRAY\x1b[0m\n');
     const question = await select({
         message: 'Choise a Question:',
         choices: [...subQuestions]
@@ -23,25 +23,25 @@ export async function qs1(products: Product[]): Promise<void> {
         case "print": {
             clear();
             printProducts(products);
-            await qs1(products);
+            if (await yesno('Back to selections?')) return await qs1(products);
             break;
         };
         case "insert": {
             clear();
             const data = { id: 31, name: "TP-Link Nvidia AX55", image: "nvidia-ax55.jpg", price: 1800000, quantity: 9, discount: 20, amount: 0 };
-            console.log(`INSERT WITH DEMO DATA:`);
+            console.log(`\n\x1b[1;36mINSERT WITH DEMO DATA:\x1b[0m\n`);
             console.table([data]);
             if (await yesno()) {
                 const result = insertProduct(products, data);
                 clear();
                 if (result !== undefined) {
-                    console.log('INSERT COMPELTED!')
+                    console.log('\x1b[1;32mINSERT COMPELTED!\x1b[0m\n')
                     console.table([result]);
                 } else {
-                    console.log('PRODUCT IS EXISTED!');
+                    console.log('\x1b[1;31mPRODUCT IS EXISTED!\x1b[0m\n');
                 }
             }
-            await qs1(products);
+            if (await yesno('Back to selections?')) return await qs1(products);
             break;
         }
 
@@ -49,26 +49,30 @@ export async function qs1(products: Product[]): Promise<void> {
             clear();
             const id = await readline('Enter ID', {type: 'number'});
             const result = removeById(products, id as number);
-            console.log((result) ? 'Remove completed!' : '\x1b[31mPRODUCT NOT FOUND!\x1b[0m');
+            console.log((result) ? '\x1b[1;32mRemove completed!\x1b[0m' : '\x1b[1;31mPRODUCT NOT FOUND!\x1b[0m');
             console.table((result) ? [result] : '');
-            await qs1(products);
+            if (await yesno('Back to selections?')) return await qs1(products);
             break;
         }
         case "update": {
             clear();
             const id = await readline('Enter ID', {type: 'number'});
             const data = {name: "Update test"};
-            console.log('UPDATE NAME with DEMO DATA UNDER...');
+            console.log('\x1b[1;36mUPDATE NAME with DEMO DATA UNDER...\x1b[0m');
             console.table([data]);
             if (await yesno()) {
-                clear();
                 const result = updateById(products, id as number, data);
-                console.log('Product updated!');
-                console.table([result]);
+                console.log(
+                    (result) 
+                    ? '\x1b[1;32mProduct updated!\x1b[0m' 
+                    : '\x1b[1;31mProduct ID Not Found!\x1b[0m'
+                );
+                console.table((result)? [result] : '');
                 break;
             }
-            await qs1(products);
+            if (await yesno('Back to selections?')) return await qs1(products);
+            break;
         };
-        default: return;
+        case "exit": return;
     }
 }
